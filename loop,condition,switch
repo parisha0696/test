@@ -1,0 +1,47 @@
+import java.util.Scanner;
+public class sample {
+    public static void main(String[]args) {
+    Scanner scan=new Scanner(System.in);
+    int choice;
+    do{
+        System.out.println("multiply");
+        System.out.println("divider");
+        System.out.println("modulus");
+        System.out.println("equal");
+        System.out.println("not equal");
+        System.out.println("out");
+        System.out.println("enter the choice: ");
+    
+       choice=scan.nextInt();
+    if(choice == 5) {
+        System.out.println("out");
+        break;
+    }
+    System.out.println("enter the 1 value : ");
+    double sum=scan.nextDouble();
+    System.out.println("enter 2 value : ");
+    double sum1=scan.nextDouble();
+    
+    switch(choice){
+        case 1:
+            System.out.println("result : "+(sum*sum1));
+            break;
+        case 2:
+            System.out.println("result : "+(sum/sum1));
+            break;
+        case 3:
+            System.out.println("result : "+(sum%sum1));
+            break;
+        default:
+        System.out.println("wrong choice  ");
+    
+    }
+    } while(choice!=4);
+    
+    scan.close(); 
+    }
+    }
+    
+
+        
+    
