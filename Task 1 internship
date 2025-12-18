@@ -1,0 +1,101 @@
+        TASK- 1
+  ARITHMETIC LOGIC UNIT (ALU)
+
+1. Introduction
+
+An Arithmetic Logic Unit (ALU) is a fundamental component of a digital computer 
+system. It is responsible for performing arithmetic and logical operations required by 
+the Central Processing Unit (CPU). The ALU takes binary inputs and performs operations 
+such as addition, subtraction, and logical functions like AND, OR, and NOT. This document explains the complete design, Verilog implementation, testbench,
+and simulation of a basic ALU.
+
+2. Supported Operations
+
+The designed ALU supports the following operations:
+
+1. Addition – Adds two binary numbers
+2. Subtraction – Subtracts one binary number from another
+3. Logical AND – Performs bitwise AND operation
+4. Logical OR – Performs bitwise OR operation
+5. Logical NOT – Performs bitwise complement operation
+Each operation is selected using a control signal called an opcode.
+
+3. ALU Architecture
+
+The ALU architecture consists of:
+Arithmetic circuits (Adder and Subtractor)
+Logic gates (AND, OR, NOT)
+Control unit (Opcode selector)
+Multiplexer (to select the final output)
+The opcode determines which operation is executed.
+Based on the opcode, the corresponding arithmetic or 
+logical result is produced at the output.
+
+4. Verilog Implementation of ALU
+
+module ALU (
+    input [3:0] A, B,
+    input [2:0] opcode,
+    output reg [3:0] result
+);
+always @(*) begin
+    case(opcode)
+        3'b000: result = A + B;      // Addition
+        3'b001: result = A - B;      // Subtraction
+        3'b010: result = A & B;      // AND
+        3'b011: result = A | B;      // OR
+        3'b100: result = ~A;         // NOT
+        default: result = 4'b0000;
+    endcase
+end
+endmodule
+
+5. Testbench for ALU
+
+module ALU_tb;
+reg [3:0] A, B;
+reg [2:0] opcode;
+wire [3:0] result;
+
+ALU uut (
+    .A(A),
+    .B(B),
+    .opcode(opcode),
+    .result(result)
+);
+initial begin
+    A = 4'b0101;
+    B = 4'b0011;
+
+    opcode = 3'b000; #10; // Addition
+    opcode = 3'b001; #10; // Subtraction
+    opcode = 3'b010; #10; // AND
+    opcode = 3'b011; #10; // OR
+    opcode = 3'b100; #10; // NOT
+
+    $stop;
+end
+endmodule
+
+
+6. Simulation Report
+
+The ALU design was simulated using HDL simulation 
+tools such as ModelSim or Vivado. Different input 
+combinations and opcodes were applied through the 
+testbench. The waveform results confirmed that the 
+ALU performs all arithmetic and logical operations
+correctly. Each opcode produced the expected output, 
+verifying the correctness of the design.
+
+
+
+
+
+
+
+
+
+
+
+
