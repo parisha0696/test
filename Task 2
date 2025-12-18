@@ -1,0 +1,135 @@
+        TASK-2
+      RAM DESIGN
+
+1. Aim
+To design and implement a simple synchronous RAM 
+module with read and write operations using Verilog
+HDL and to verify its functionality through simulation.
+
+2. Introduction
+Random Access Memory (RAM) is a volatile memory
+used to temporarily store data in digital systems. 
+In synchronous RAM, all memory operations (read and write)
+are controlled by a clock signal, ensuring predictable and 
+stable operation. Synchronous RAM is widely used in processors,
+controllers, and FPGA-based systems.
+
+3. Types of RAM
+•	Asynchronous RAM – Operations depend directly on control signals.
+•	Synchronous RAM – Operations occur only on clock edges.
+This design focuses on Synchronous RAM.
+
+4. Block Diagram Description
+
+A synchronous RAM consists of:
+•	Memory array
+•	Address lines
+•	Data input
+•	Data output
+•	Write enable signal
+•	Clock signal
+
+5. Signal Description
+
+Signal-Description
+clk-Clock signal
+we-Write enable (1 = write, 0 = read)
+addr-Address input
+din-Data input
+dout-Data output
+
+6. Working Principle
+•	When write enable (we) = 1, data present at din is written to the memory 
+location specified by addr on the rising edge of the clock.
+•	When write enable (we) = 0, data stored at the given address is read and
+appears at dout on the rising edge of the clock.
+•	All operations are synchronized with the clock signal.
+
+7. Verilog Code – Synchronous RAM
+module sync_ram (
+    input clk,
+    input we,
+    input [3:0] addr,
+    input [7:0] din,
+    output reg [7:0] dout
+);
+    reg [7:0] mem [0:15];
+    always @(posedge clk) begin
+        if (we)
+            mem[addr] <= din;   // Write operation
+        else
+            dout <= mem[addr];  // Read operation
+    end
+endmodule
+
+8. Testbench Code
+module sync_ram_tb;
+    reg clk;
+    reg we;
+    reg [3:0] addr;
+    reg [7:0] din;
+    wire [7:0] dout;
+
+    sync_ram uut (
+        .clk(clk),
+        .we(we),
+        .addr(addr),
+        .din(din),
+        .dout(dout)
+    );
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+    initial begin
+        we = 1;
+        addr = 4'd1; din = 8'hAA; #10;
+        addr = 4'd2; din = 8'h55; #10;
+
+        we = 0;
+        addr = 4'd1; #10;
+        addr = 4'd2; #10;
+        #20 $finish;
+    end
+endmodule
+
+9.Simulation Demonstrating RAM Functionality
+
+Simulation is used to verify the correct operation of the
+synchronous RAM design before hardware implementation. The
+simulation confirms that data is properly written into memory 
+locations and accurately read from them in synchronization with
+the clock signal.
+
+10.Simulation Procedure
+1.	Initialize all input signals (clk, we, addr, din).
+2.	Apply a periodic clock signal.
+3.	Enable the write operation by setting we = 1.
+4.	Provide address and data inputs to store data in memory locations on the rising edge of the clock.
+5.	Disable the write operation by setting we = 0.
+6.	Apply read addresses and observe the output data (dout) on the rising edge of the clock.
+7.	Compare the read data with the written data to verify correctness.
+
+11.Conclusion
+The simulation successfully demonstrates the functionality of
+the synchronous RAM. The RAM correctly performs write and read
+operations in response to the clock and control signals, confirming 
+that the design meets the required specifications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
