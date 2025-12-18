@@ -1,0 +1,115 @@
+        TASK-3
+  PIPELINE PROCESSOR DESIGN 
+
+4-Stage Pipelined Processor Design
+
+1.Introduction
+A pipelined processor improves performance by dividing 
+instruction execution into multiple stages and allowing 
+several instructions to be processed simultaneously. Each 
+stage completes a part of an instruction in one clock cycle. 
+This design focuses on a 4-stage pipeline supporting basic 
+instructions such as ADD, SUB, and LOAD.
+
+2.Pipeline Stages
+
+Stage 1: Instruction Fetch (IF)
+•	The instruction is fetched from Instruction Memory using the Program Counter (PC).
+•	PC is incremented to point to the next instruction.
+•	Output is stored in the IF/ID pipeline register.
+Operations:
+•	IR ← InstructionMemory[PC]
+•	PC ← PC + 1
+
+Stage 2: Instruction Decode / Register Fetch (ID)
+•	The fetched instruction is decoded.
+•	Source registers are read from the Register File.
+•	Control signals are generated.
+Operations:
+•	Decode opcode (ADD, SUB, LOAD)
+•	Read registers Rs and Rt
+•	Immediate value extraction (if needed)
+
+Stage 3: Execute / Address Calculation (EX)
+•	Arithmetic or logical operation is performed using the ALU.
+•	For LOAD instruction, memory address is calculated.
+Operations:
+•	ADD → ALU = Rs + Rt
+•	SUB → ALU = Rs − Rt
+•	LOAD → ALU = Base + Offset
+
+Stage 4: Memory Access / Write Back (MEM/WB)
+•	LOAD instruction accesses Data Memory.
+•	Results are written back to the Register File.
+Operations:
+•	LOAD → Rd ← DataMemory[ALU]
+•	ADD/SUB → Rd ← ALU Result
+
+3.Supported Instruction Format
+
+ADD
+ADD Rd, Rs, Rt
+Rd ← Rs + Rt
+
+SUB
+SUB Rd, Rs, Rt
+Rd ← Rs − Rt
+
+LOAD
+LOAD Rd, Offset(Rs)
+Rd ← Memory[Rs + Offset]
+
+4.Pipeline Register Structure
+
+Pipeline Register -	Stored Information
+IF/ID 	-  Instruction, PC+1
+ID/EX	  -  Operand values, control signals
+EX/WB	  -  ALU result or memory data
+
+5.Pipeline Execution Example
+
+Instruction Sequence:
+
+I1: LOAD R1, 0(R2)
+I2: ADD  R3, R1, R4
+I3: SUB  R5, R3, R6
+
+
+Pipeline Timing Table:
+
+Cycle 	IF	 ID 	EX	 WB
+1     	I1	  –	   –	  –
+2	      I2	  I1	 –	  –
+3     	I3	  I2	 I1	  –
+4     	–	    I3	 I2	  I1
+5	      –	    –  	 I3	  I2
+6	      –	    –	   –	  I3
+
+6.Advantages of Pipelining
+
+•	Increased instruction throughput
+•	Better CPU utilization
+•	Faster program execution
+
+7.Limitations
+
+•	Data hazards (e.g., LOAD followed by ADD)
+•	Requires hazard detection or forwarding
+•	Slightly complex control logic
+
+8.Conclusion
+A 4-stage pipelined processor efficiently executes 
+basic arithmetic and memory instructions by overlapping 
+instruction execution. This design demonstrates the core
+principles of pipelining and is suitable for academic projects 
+and simulations.
+
+
+
+
+
+
+
+
+
+
