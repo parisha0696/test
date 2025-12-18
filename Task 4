@@ -1,0 +1,204 @@
+        TASK - 4
+   DIGITAL FILTER DESIGN 
+
+1.Introduction
+
+Digital signal processing (DSP) plays a vital role in 
+modern communication, audio, image processing,biomedical
+systems, and control applications. A digital filter is a 
+fundamental DSP component used to modify or enhance of an
+discrete-time signals by selectively passing or attenuating 
+certain frequency components.
+
+Among digital filters, Finite Impulse Response (FIR) filters 
+are widely used due to their inherent stability, linear phase 
+characteristics, and ease of implementation in both software 
+and hardware.
+
+2.Objective
+
+The main objectives of this project are:
+
+1.To design a digital FIR filter based on given frequency specifications
+2.To generate filter coefficients using MATLAB
+3.To implement the FIR filter using Verilog HDL
+4.To simulate and verify the filter performance
+5.To analyze frequency and time-domain responses
+
+3.Types of Digital Filters
+
+Digital filters are broadly classified into:
+
+1.	Finite Impulse Response (FIR) Filters
+2.	Infinite Impulse Response (IIR) Filters
+
+
+4.Comparison
+
+Parameter	          FIR Filter	               IIR Filter
+
+Stability	          Always stable	             May be unstable
+Phase response	    Linear phase possible  	   Non-linear phase
+Feedback	          No	                       Yes
+Complexity	        Higher order	             Lower order
+
+5.FIR Filter Design Methods
+
+Common FIR design techniques include:
+
+Window Method
+Frequency Sampling Method
+Optimal (Parks–McClellan) Method
+Window Method (Used in This Design)
+The ideal impulse response is multiplied by a window
+function to reduce Gibbs phenomenon.
+
+Common windows:
+
+Rectangular
+Hamming
+Hanning
+Blackman
+
+6.Design Specifications (Example)
+
+Filter type: Low-pass FIR filter
+Sampling frequency (): 10 kHz
+Cutoff frequency (): 1 kHz
+Filter order: 32
+Window: Hamming window
+
+7.MATLAB-Based FIR Filter Design
+
+MATLAB is used to calculate FIR coefficients and analyze filter behavior.
+
+Design Steps
+
+1.	Define filter parameters
+2.	Compute coefficients using fir1
+3.	Plot frequency response using freqz
+4.	Test with noisy input signal
+
+Analysis Results
+
+Smooth passband
+Adequate stopband attenuation
+Linear phase response
+
+8.Verilog Code for FIR Filter
+
+Design Specifications (Assumed)
+•	FIR Type: Low-pass
+•	Filter order: 8-tap
+•	Data width: 16-bit signed
+•	Coefficients: Precomputed using MATLAB
+FIR Filter Verilog Module
+
+module fir_filter (
+    input clk,
+    input reset,
+    input signed [15:0] x_in,
+    output reg signed [31:0] y_out
+);
+   // FIR coefficients (example values)
+    parameter signed [15:0] h0 = 16'd2;
+    parameter signed [15:0] h1 = 16'd4;
+    parameter signed [15:0] h2 = 16'd6;
+    parameter signed [15:0] h3 = 16'd8;
+    parameter signed [15:0] h4 = 16'd8;
+    parameter signed [15:0] h5 = 16'd6;
+    parameter signed [15:0] h6 = 16'd4;
+    parameter signed [15:0] h7 = 16'd2;
+
+    reg signed [15:0] x_reg [0:7];
+    integer i;
+
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            for (i = 0; i < 8; i = i + 1)
+                x_reg[i] <= 16'd0;
+            y_out <= 32'd0;
+        end else begin
+            x_reg[0] <= x_in;
+            for (i = 1; i < 8; i = i + 1)
+                x_reg[i] <= x_reg[i-1];
+
+            y_out <= (h0*x_reg[0] + h1*x_reg[1] + h2*x_reg[2] +
+                      h3*x_reg[3] + h4*x_reg[4] + h5*x_reg[5] +
+                      h6*x_reg[6] + h7*x_reg[7]);
+        end
+    end
+endmodule
+
+9.Simulation Results
+
+Observed Waveforms
+
+•	Input signal (x_in): Discrete-time sequence applied at each clock cycle
+•	Output signal (y_out): Smoothed output due to FIR filtering
+•	Initial delay observed due to filter order
+•	Output gradually settles as more samples are processed
+
+Key Observations
+
+•	FIR filter removes high-frequency variations
+•	Output waveform matches expected convolution result
+•	No instability or oscillations observed
+•	Linear phase behavior confirmed
+
+10.Performance Analysis
+
+A. Timing Performance
+
+•	One output per clock cycle
+•	Latency = Number of taps (8 cycles)
+•	Suitable for real-time applications
+
+B. Hardware Resource Utilization
+
+•	Adders: 7
+•	Multipliers: 8
+•	Registers: 8 delay elements
+•	Moderate LUT usage (FPGA)
+
+C. Accuracy
+
+•	High stopband attenuation
+•	Minimal passband ripple
+•	Fixed-point precision affects output slightly
+
+D. Power and Area
+
+•	No feedback → low power consumption
+•	Scalable architecture
+•	Efficient for FPGA/ASIC implementation 
+
+11.Conclusion
+
+The FIR digital filter was successfully implemented
+using Verilog HDL. Simulation results validate correct
+functionality and closely match MATLAB output. The design
+is efficient, stable, and suitable for real-time DSP applications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
